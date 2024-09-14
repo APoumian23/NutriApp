@@ -8,12 +8,14 @@
 import React from 'react';
 import {config} from '@gluestack-ui/config';
 import {GluestackUIProvider} from '@gluestack-ui/themed';
-import ImcCalc from './src/pages/ImcCalc';
+import MainRoutes from './src/routes/MainRoutes';
+import {useAppSelector} from './src/redux/hooks';
 
 function App(): React.JSX.Element {
+  const {} = useAppSelector(state => state.main);
   return (
     <GluestackUIProvider config={config}>
-      <ImcCalc />
+      <MainRoutes />
     </GluestackUIProvider>
   );
 }

@@ -1,30 +1,48 @@
 import React, {useState} from 'react';
 import {Card, Heading, SafeAreaView, Text, VStack} from '@gluestack-ui/themed';
 import UIInput from '../components/UIInput';
+import UIBotton from '../components/UIBotton';
+import {useAppDispatch} from '../redux/hooks';
 
 export default function ImcCalc() {
   const [peso, setPeso] = useState('');
   const [altura, setAltura] = useState('');
+  const [resultado, setResultado] = useState('');
 
-  function calcImc() {
+  const dispatch = useAppDispatch();
+
+  function calcImcHandler() {
     const calcImc = +peso / (+altura * +altura);
-    const resultado = calcImc;
-    if (resultado < 18.5) {
-      return `${resultado} "Es Delgad@"`;
-    } else if (resultado < 24.9) {
-      return `${resultado} "Es Normal"`;
-    } else if (resultado > 24.9) {
-      return `${resultado} "Esta en Sobrepeso"`;
-    } else if (resultado > 29.9) {
-      return `${resultado} "Esta en Obesidad"`;
+    const s = resultado;
+    const resultadoCalcImc = calcImc;
+
+    if (resultadoCalcImc < 18.5) {
+      return `${resultadoCalcImc} "Es Delgad@"`;
+    } else if (resultadoCalcImc > 18.5 && resultadoCalcImc < 24.9) {
+      return `${resultadoCalcImc} "Es Normal"`;
+    } else if (resultadoCalcImc > 24.9 && resultadoCalcImc < 29.9) {
+      return `${resultadoCalcImc} "Esta en Sobrepeso"`;
+    } else if (resultadoCalcImc > 29.9) {
+      return `${resultadoCalcImc} "Esta en Obesidad"`;
     }
+    console.log('Presionado');
+
+    //dispatch(setResultado());
   }
+
+  function cleanCalculatorHandler() {
+    // dispatch(cleanCalculator());
+    console.log('Presionado2');
+  }
+
   return (
     <VStack flex={1} justifyContent="center" bg="$secondary0">
-      <SafeAreaView>
-        <Heading>NutriApp</Heading>
+      <SafeAreaView ml={25}>
+        <Heading fontSize={25} mt={10}>
+          NutriApp
+        </Heading>
       </SafeAreaView>
-      <VStack flex={8} justifyContent="flex-start">
+      <VStack flex={8} justifyContent="flex-start" mt={15}>
         <Card
           size="lg"
           variant="elevated"
@@ -34,11 +52,17 @@ export default function ImcCalc() {
           gap={30}>
           <Heading>Calculemos el IMC</Heading>
           <Text>Altura(m)</Text>
-          <UIInput placeHolder="Introduce la altura" keyBoardType={'number'} />
+          <UIInput placeHolder="Introduce la altura" />
           <Text>Peso(kg)</Text>
           <UIInput placeHolder="Introduce el peso" />
+          <UIBotton onPress={calcImcHandler} title="Calcular" />
           <Text>Resultado</Text>
-          {calcImc()}
+          {resultado}
+          <UIBotton
+            onPress={cleanCalculatorHandler}
+            title="Limpiar"
+            bg="green"
+          />
         </Card>
       </VStack>
     </VStack>
