@@ -2,37 +2,27 @@ import React, {useState} from 'react';
 import {Card, Heading, SafeAreaView, Text, VStack} from '@gluestack-ui/themed';
 import UIInput from '../components/UIInput';
 import UIBotton from '../components/UIBotton';
-import {useAppDispatch} from '../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
+import {imcCalc, imcCalcReset} from '../redux/slices/mainSlice';
 
 export default function ImcCalc() {
   const [peso, setPeso] = useState('');
   const [altura, setAltura] = useState('');
-  const [resultado, setResultado] = useState('');
+
+  const {resultadoImcString, resultadoImcValue} = useAppSelector(
+    state => state.main,
+  );
 
   const dispatch = useAppDispatch();
 
   function calcImcHandler() {
-    const calcImc = +peso / (+altura * +altura);
-    const s = resultado;
-    const resultadoCalcImc = calcImc;
-
-    if (resultadoCalcImc < 18.5) {
-      return `${resultadoCalcImc} "Es Delgad@"`;
-    } else if (resultadoCalcImc > 18.5 && resultadoCalcImc < 24.9) {
-      return `${resultadoCalcImc} "Es Normal"`;
-    } else if (resultadoCalcImc > 24.9 && resultadoCalcImc < 29.9) {
-      return `${resultadoCalcImc} "Esta en Sobrepeso"`;
-    } else if (resultadoCalcImc > 29.9) {
-      return `${resultadoCalcImc} "Esta en Obesidad"`;
-    }
-    console.log('Presionado');
-
-    //dispatch(setResultado());
+    dispatch(imcCalc({peso: peso, altura: altura}));
   }
 
   function cleanCalculatorHandler() {
-    // dispatch(cleanCalculator());
-    console.log('Presionado2');
+    dispatch(imcCalcReset());
+    setPeso('');
+    setAltura('');
   }
 
   return (
@@ -51,13 +41,26 @@ export default function ImcCalc() {
           borderRadius={'$lg'}
           gap={30}>
           <Heading>Calculemos el IMC</Heading>
-          <Text>Altura(m)</Text>
-          <UIInput placeHolder="Introduce la altura" />
           <Text>Peso(kg)</Text>
-          <UIInput placeHolder="Introduce el peso" />
+          <UIInput
+            placeHolder="Introduce el Peso"
+            keyboardType="numeric"
+            onChangeTexte={setPeso}
+            value={peso}
+          />
+          <Text>Altura(m)</Text>
+          <UIInput
+            placeHolder="Introduce la Altura"
+            keyboardType="numeric"
+            onChangeTexte={setAltura}
+            value={altura}
+          />
           <UIBotton onPress={calcImcHandler} title="Calcular" />
           <Text>Resultado</Text>
-          {resultado}
+          <Text>
+            {resultadoImcString &&
+              `${resultadoImcString} y el IMC es: ${resultadoImcValue}`}
+          </Text>
           <UIBotton
             onPress={cleanCalculatorHandler}
             title="Limpiar"
