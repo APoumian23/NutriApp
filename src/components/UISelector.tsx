@@ -23,7 +23,7 @@ interface Props {
 
 export default function UISelector({onValueChange, value, items}: Props) {
   return (
-    <Select onValueChange={onValueChange}>
+    <Select onValueChange={onValueChange} borderRadius={10}>
       <SelectTrigger variant="outline" size="md">
         <SelectInput placeholder="Select option" />
         {/* @ts-ignore */}

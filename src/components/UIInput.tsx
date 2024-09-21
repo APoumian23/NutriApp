@@ -4,22 +4,22 @@ import {Input, InputField} from '@gluestack-ui/themed';
 interface Props {
   placeHolder?: string;
   keyboardType?: 'default' | 'numeric';
-  onChangeTexte: ((text: string) => void) | undefined;
+  onChangeText: ((text: string) => void) | undefined;
   value: string;
 }
 
 export default function UIInput({
   placeHolder,
   keyboardType,
-  onChangeTexte,
+  onChangeText,
   value,
 }: Props) {
   return (
-    <Input variant="outline" size="lg" mx={15} borderRadius={10}>
+    <Input variant="outline" size="lg" borderRadius={10}>
       <InputField
         placeholder={placeHolder}
         keyboardType={keyboardType}
-        onChangeText={onChangeTexte}
+        onChangeText={onChangeText}
         value={value}
       />
     </Input>

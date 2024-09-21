@@ -8,11 +8,15 @@ import {
   VStack,
 } from '@gluestack-ui/themed';
 import UIInput from '../components/UIInput';
-import UIBotton from '../components/UIBotton';
+import UIBotton from '../components/UIButton';
 import UISelector from '../components/UISelector';
 import {Alert} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
-import {gebCalc} from '../redux/slices/mainSlice';
+import {
+  gebHarrisCalc,
+  getHarrisCalc,
+  imcCalcReset,
+} from '../redux/slices/mainSlice';
 
 export default function GastoEnergetico() {
   const [sexo, setSexo] = useState('M');
@@ -23,23 +27,31 @@ export default function GastoEnergetico() {
   const [condicion, setCondicion] = useState('');
   const [temperatura, setTemperatura] = useState('');
 
-  const {resultadoGeb} = useAppSelector(state => state.main);
+  const {resultadoHarrisGeb, resultadoHarrisGet} = useAppSelector(
+    state => state.main,
+  );
   const dispatch = useAppDispatch();
 
-  function calculatorGebHandler() {
+  function calculatorHarrisHandler() {
     if (!sexo || !peso || !altura || !actividad || !condicion || !temperatura) {
       Alert.alert('Porfavor llena todos los campos');
       return;
     }
     const data = {sexo, peso, altura, edad, actividad, condicion, temperatura};
 
-    dispatch(gebCalc(data));
+    dispatch(gebHarrisCalc(data));
+    dispatch(getHarrisCalc(data));
   }
 
   function cleanCalculatorHandler() {
-    // dispatch(imcCalcReset());
-    // setPeso('');
-    // setAltura('');
+    dispatch(imcCalcReset());
+    setSexo('');
+    setPeso('');
+    setAltura('');
+    setEdad('');
+    setActividad('');
+    setCondicion('');
+    setTemperatura('');
   }
 
   useEffect(() => {
@@ -51,7 +63,7 @@ export default function GastoEnergetico() {
       <ScrollView>
         <VStack justifyContent="center" gap={15} mx={20}>
           <Card gap={5}>
-            <Heading>Gasto Energético Total</Heading>
+            <Heading>Gasto Energético por Fórmula Harris</Heading>
             <Text>Sexo:</Text>
             <UISelector
               items={[
@@ -62,15 +74,15 @@ export default function GastoEnergetico() {
               value={sexo}
             />
             <Text>Peso:</Text>
-            <UIInput placeHolder="kg" onChangeTexte={setPeso} value={peso} />
+            <UIInput placeHolder="kg" onChangeText={setPeso} value={peso} />
             <Text>Altura:</Text>
             <UIInput
               placeHolder="Centímetros"
-              onChangeTexte={setAltura}
+              onChangeText={setAltura}
               value={altura}
             />
             <Text>Edad:</Text>
-            <UIInput placeHolder="Edad" onChangeTexte={setEdad} value={edad} />
+            <UIInput placeHolder="Edad" onChangeText={setEdad} value={edad} />
             <Text>Actividad Fisica:</Text>
             <UISelector
               items={[
@@ -86,7 +98,7 @@ export default function GastoEnergetico() {
             {sexo === 'M' && (
               <UISelector
                 items={[
-                  {label: 'Ninguno', id: '1.0'},
+                  {label: 'Ninguna', id: '1.0'},
                   {label: 'Tumor Solido', id: '1.15'},
                   {label: 'Leucemia Linfoma', id: '1.27'},
                   {label: 'Enfermedad Inflamatoria Intestinal', id: '1.11'},
@@ -107,7 +119,7 @@ export default function GastoEnergetico() {
             {sexo === 'F' && (
               <UISelector
                 items={[
-                  {label: 'Ninguno', id: '1.0'},
+                  {label: 'Ninguna', id: '1.0'},
                   {label: 'Tumor Solido', id: '1.25'},
                   {label: 'Leucemia Linfoma', id: '1.37'},
                   {label: 'Enfermedad Inflamatoria Intestinal', id: '1.12'},
@@ -137,9 +149,17 @@ export default function GastoEnergetico() {
               onValueChange={setTemperatura}
               value={temperatura}
             />
-            <UIBotton title="Calcular" bg="" onPress={calculatorGebHandler} />
+            <UIBotton
+              title="Calcular"
+              bg=""
+              onPress={calculatorHarrisHandler}
+            />
             <Text>Resultado</Text>
-            <Text>{resultadoGeb}</Text>
+            <Text>
+              {resultadoHarrisGeb &&
+                `El resultado GEB es ${resultadoHarrisGeb} calorias 
+El resultado GET es ${resultadoHarrisGet} calorias `}
+            </Text>
             <UIBotton
               title="Limpiar"
               bg="green"

@@ -6,8 +6,8 @@ import {useAppDispatch} from '../redux/hooks';
 import ImcCalc from './ImcCalc';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCalculator, faHouse} from '@fortawesome/free-solid-svg-icons';
-import GEB from './GEB';
-import GET from './GET';
+import GEB from './FormulaHarris';
+import GET from './FormulaMifflin';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,20 +27,20 @@ export default function Dashboard() {
           ),
         }}></Tab.Screen>
       <Tab.Screen
-        name="gastoEnergeticoBasal"
+        name="gastoEnergeticoHarris"
         component={GEB}
         options={{
-          tabBarLabel: 'Gasto Energetico Basal',
+          tabBarLabel: 'Formula Harris',
           tabBarIcon: ({color}) => (
             <FontAwesomeIcon icon={faCalculator} color={color} size={20} />
           ),
         }}
       />
       <Tab.Screen
-        name="gastoEnergetico"
+        name="gastoEnergeticoMifflin"
         component={GET}
         options={{
-          tabBarLabel: 'Gasto Energetico Total',
+          tabBarLabel: 'Formula Mifflin',
           tabBarIcon: ({color}) => (
             <FontAwesomeIcon icon={faCalculator} color={color} size={20} />
           ),

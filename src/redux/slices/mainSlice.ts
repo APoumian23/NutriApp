@@ -5,14 +5,22 @@ interface InitialState {
   resultadoImcValue: string;
   resultadoImcString: string;
 
-  resultadoGeb: string;
+  resultadoHarrisGeb: string;
+  resultadoHarrisGet: string;
+
+  resultadoMifflinGeb: string;
+  resultadoMifflinGet: string;
 }
 
 const initialState: InitialState = {
   resultadoImcValue: '',
   resultadoImcString: '',
 
-  resultadoGeb: '',
+  resultadoHarrisGeb: '',
+  resultadoHarrisGet: '',
+
+  resultadoMifflinGeb: '',
+  resultadoMifflinGet: '',
 };
 
 const mainSlice = createSlice({
@@ -47,39 +55,106 @@ const mainSlice = createSlice({
     imcCalcReset: state => {
       state.resultadoImcString = '';
       state.resultadoImcValue = '';
+
+      state.resultadoHarrisGeb = '';
+      state.resultadoHarrisGet = '';
+
+      state.resultadoMifflinGeb = '';
+      state.resultadoMifflinGet = '';
     },
 
-    gebCalc: (
+    gebHarrisCalc: (
       state,
       action: PayloadAction<{
         sexo: string;
         peso: string;
         altura: string;
         edad: string;
+      }>,
+    ) => {
+      if (action.payload.sexo === 'F') {
+        const resultadoHarrisGeb =
+          655.1 +
+          9.563 * Number(action.payload.peso) +
+          1.85 * Number(action.payload.altura) -
+          4.676 * Number(action.payload.edad);
+        state.resultadoHarrisGeb = String(Math.round(resultadoHarrisGeb));
+      } else if (action.payload.sexo === 'M') {
+        const resultadoHarrisGeb =
+          66.5 +
+          13.75 * Number(action.payload.peso) +
+          5.003 * Number(action.payload.altura) -
+          6.775 * Number(action.payload.edad);
+        state.resultadoHarrisGeb = String(Math.round(resultadoHarrisGeb));
+      }
+    },
+
+    getHarrisCalc: (
+      state,
+      action: PayloadAction<{
         actividad: string;
         condicion: string;
         temperatura: string;
       }>,
     ) => {
+      const resultadoHarrisGet =
+        Number(state.resultadoHarrisGeb) *
+        Number(action.payload.actividad) *
+        Number(action.payload.condicion) *
+        Number(action.payload.temperatura);
+      state.resultadoHarrisGet = String(Math.round(resultadoHarrisGet));
+    },
+
+    gebMifflinCalc: (
+      state,
+      action: PayloadAction<{
+        sexo: string;
+        peso: string;
+        altura: string;
+        edad: string;
+      }>,
+    ) => {
       if (action.payload.sexo === 'F') {
-        const resultado =
-          655.1 +
-          9.563 * Number(action.payload.peso) +
-          1.85 * Number(action.payload.altura) -
-          4.676 * Number(action.payload.edad);
-        state.resultadoGeb = String(Math.round(resultado));
+        const resultadoMifflinGeb =
+          10 * Number(action.payload.peso) +
+          6.25 * Number(action.payload.altura) -
+          5 * Number(action.payload.edad) -
+          -161;
+        state.resultadoMifflinGeb = String(Math.round(resultadoMifflinGeb));
       } else if (action.payload.sexo === 'M') {
-        const resultado =
-          66.5 +
-          13.75 * Number(action.payload.peso) +
-          5.003 * Number(action.payload.altura) -
-          6.775 * Number(action.payload.edad);
-        state.resultadoGeb = String(Math.round(resultado));
+        const resultadoMifflinGeb =
+          10 * Number(action.payload.peso) +
+          6.25 * Number(action.payload.altura) -
+          5 * Number(action.payload.edad) +
+          5;
+        state.resultadoMifflinGeb = String(Math.round(resultadoMifflinGeb));
       }
+    },
+    getMifflinCalc: (
+      state,
+      action: PayloadAction<{
+        actividad: string;
+        condicion: string;
+        temperatura: string;
+      }>,
+    ) => {
+      const resultadoMifflinGet =
+        Number(state.resultadoMifflinGeb) *
+        Number(action.payload.actividad) *
+        Number(action.payload.condicion) *
+        Number(action.payload.temperatura);
+      state.resultadoMifflinGet = String(Math.round(resultadoMifflinGet));
     },
   },
   extraReducers: builder => {},
 });
 
-export const {imcCalc, imcCalcReset, gebCalc} = mainSlice.actions;
+export const {
+  imcCalc,
+  imcCalcReset,
+  gebHarrisCalc,
+  getHarrisCalc,
+  gebMifflinCalc,
+  getMifflinCalc,
+} = mainSlice.actions;
 export default mainSlice.reducer;

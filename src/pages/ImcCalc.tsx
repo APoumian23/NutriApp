@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Card, Heading, SafeAreaView, Text, VStack} from '@gluestack-ui/themed';
 import UIInput from '../components/UIInput';
-import UIBotton from '../components/UIBotton';
+import UIBotton from '../components/UIButton';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {imcCalc, imcCalcReset} from '../redux/slices/mainSlice';
 
